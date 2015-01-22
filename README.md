@@ -3,6 +3,7 @@
 Siren.js builds upon [koa](https://github.com/koajs/koa) and [Kraken.js](https://github.com/krakenjs/kraken-js) and enables 
 environment-aware, dynamic configuration, advanced middleware capabilities, security, and app lifecycle events.
 
+[![Build Status](https://travis-ci.org/TerenceZ/siren-js.png)](https://travis-ci.org/TerenceZ/siren-js)
 
 ## Basic Usage
 
