@@ -1,15 +1,9 @@
 {
-    "express": {
-        "view cache": false
-    },
+  "middleware": {
 
-    "middleware": {
-
-        "shutdown": {
-            // Clean shutdowns aren't necessary in `dev` mode
-            "enabled": false
-        }
-
+    "shutdown": {
+      // Clean shutdowns aren't necessary in `dev` mode
+      "enabled": false
     }
-
+  }
 }

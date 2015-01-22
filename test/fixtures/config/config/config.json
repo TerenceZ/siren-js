@@ -1,0 +1,8 @@
+{
+	"default-variable": "default",
+	"variable": "config:default-variable",
+	"nested": {
+		"a": "config:variable",
+		"c": "c"
+	}
+}

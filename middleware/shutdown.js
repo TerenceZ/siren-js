@@ -15,58 +15,66 @@
  │   See the License for the specific language governing permissions and       │
  │   limitations under the License.                                            │
  \*───────────────────────────────────────────────────────────────────────────*/
-'use strict';
+"use strict";
 
-var States = {
-    CONNECTED: 0,
-    DISCONNECTING: 2
+var STATES = {
+    "CONNECTED": 0,
+    "DISCONNECTING": 2
 };
 
 
-module.exports = function (config) {
-    var template, timeout, state, app, server;
+module.exports = function shutdown(app, options) {
+
+    var state, server, timeout, template;
 
     function close() {
-        state = States.DISCONNECTING;
-        app.emit('shutdown', server, timeout);
+        app.emit("shutdown", server, timeout);
     }
 
-    config = config || {};
-    template = config.template;
-    timeout = config.timeout || 10 * 1000;
-    state = States.CONNECTED;
+    app.once("shutdown", function () {
+        state = STATES.DISCONNECTING;
+    });
 
-    return function shutdown(req, res, next) {
+    options = options || {};
+    template = options.template;
+    timeout = options.timeout || 10 * 1000;
+    state = STATES.CONNECTED;
 
-        function json() {
-            res.send('Server is shutting down.');
-        }
+    return function *shutdown(next) {
 
-        function html() {
-            template ? res.render(template) : json();
-        }
+        if (state === STATES.DISCONNECTING) {
+            this.status = 503;
+            this.set("Connection", "close");
 
-        if (state === States.DISCONNECTING) {
-            res.status(503);
-            res.setHeader('Connection', 'close');
-            res.format({
-                json: json,
-                html: html
-            });
+            switch (this.accepts(["html", "json"])) {
+                case "html":
+                    if (template && typeof this.render === "function") {
+                        yield *this.render(template);
+                    } else {
+                        this.body = "server is shutting down.";
+                        this.type = "text/html";
+                    }
+                    break;
+
+                case "json":
+                    this.body = {
+                        message: "server is shutting down."
+                    };
+                    break;
+
+                default:
+                    this.body = "server is shutting down.";
+                    this.type = "text/plain";
+            }
             return;
         }
 
-        if (!app) {
-            // Lazy-bind - only attempt clean shutdown
-            // if we've taken at least one request.
-            app = req.app;
-            server = req.socket.server;
-            process.once('SIGTERM', close);
-            process.once('SIGINT', close);
+        if (!server) {
+            server = this.socket.server;
+            process.once("SIGTERM", close);
+            process.once("SIGINT", close);
         }
 
-        next();
-
+        yield *next;
     };
-
 };

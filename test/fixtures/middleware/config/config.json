@@ -1,22 +1,70 @@
 {
+    "app": {
+        "view engine": "jade",
+        "views": "path:./views"
+    },
+
     "middleware": {
         "shutdown": {
-            "enabled": true,
-            "priority": 0,
-            "module": "path:../../../middleware/shutdown"
-        },
-
-        "multipart": {
-            "enabled": true,
-            "priority": 80,
-            "module": "path:../../../middleware/multipart"
-        },
-
-        "appsec": null,
-
-        "favicon": {
+            "enabled": false,
+            "priority": 10,
             "module": {
-                "arguments": [ "path:../public/favicon.ico" ]
+                "name": "path:../../../middleware/shutdown",
+                "arguments": [
+                  "__app",
+                  {
+                    "template": "shutdown"
+                  }
+                ]
+            }
+        },
+
+        "error": {
+            "enabled": false,
+            "priority": 60,
+            "module": {
+                "name": "path:../../../middleware/error",
+                "arguments": [
+                  "error"
+                ]
+            }
+        },
+
+        "404": {
+            "enabled": false,
+            "priority": 100,
+            "module": {
+                "name": "path:../../../middleware/404",
+                "arguments": [
+                  "404"
+                ]
+            }
+        },
+
+        "custom": {
+            "enabled": true,
+            "priority": 150,
+            "module": {
+                "name": "path:./middleware/custom",
+                "arguments": [
+                    {
+                        "a": 1
+                    }
+                ]
+            }
+        },
+
+        "custom2": {
+            "name": "custom2",
+            "enabled": true,
+            "priority": 160,
+            "module": {
+                "name": "path:./middleware/custom",
+                "arguments": [
+                    {
+                        "b": 2
+                    }
+                ]
             }
         }
     }

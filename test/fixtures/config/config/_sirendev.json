@@ -1,0 +1,8 @@
+{
+	"test-variable": "test",
+	"variable": "config:test-variable",
+	"nested": {
+		"a": "config:variable",
+		"b": "b"
+	}
+}

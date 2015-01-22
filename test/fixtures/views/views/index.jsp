@@ -1,1 +1,0 @@
-<c:template xmlns:c="core" name="index" params="name">Hello, ${name}!</c:template>

@@ -15,70 +15,39 @@
  │   See the License for the specific language governing permissions and       │
  │   limitations under the License.                                            │
  \*───────────────────────────────────────────────────────────────────────────*/
-'use strict';
+"use strict";
 
-var Bluebird = require('bluebird');
-var path = require('path');
-var caller = require('caller');
-var express = require('express');
-var bootstrap = require('./lib/bootstrap');
-var debug = require('debuglog')('kraken');
-
-
-function noop(obj, cb) {
-    cb(null, obj);
-}
+var co = require("co");
+var koa = require("koa");
+var path = require("path");
+var caller = require("caller");
+var bootstrap = require("./lib/bootstrap");
+var debug = require("debuglog")("siren");
 
 
-module.exports = function (options) {
-    var app;
+module.exports = function siren(options) {
 
-    if (typeof options === 'string') {
-        options = { basedir: options };
-    }
+  if (typeof options === "string") {
+    options = {
+      basedir: options
+    };
+  }
 
-    options = options || {};
-    options.protocols = options.protocols || {};
-    options.onconfig  = options.onconfig || noop;
-    options.basedir   = options.basedir || path.dirname(caller());
-    options.mountpath = null;
+  options = options || {};
+  options.protocols = options.protocols || {};
+  options.basedir = options.basedir || path.dirname(caller());
 
-    debug('kraken options\n', options);
+  debug("siren options\n", options);
 
-    app = express();
-    app.once('mount', function onmount(parent) {
-        var deferred, complete, start, error;
+  var app = koa();
 
-        // Remove sacrificial express app
-        parent._router.stack.pop();
+  co(function *() {
 
-        // Since this particular `app` instance is
-        // subsequently deleted, the `mountpath` is
-        // moved to `options` for use later.
-        options.mountpath = app.mountpath;
+    yield *bootstrap(app, options);
+  }).then(
+    app.emit.bind(app, "start"),
+    app.emit.bind(app, "error")
+  );
 
-        deferred = Bluebird.pending();
-        complete = deferred.resolve.bind(deferred);
-        start = parent.emit.bind(parent, 'start');
-        error = parent.emit.bind(parent, 'error');
-
-        // Kick off server and add middleware which will block until
-        // server is ready. This way we don't have to block standard
-        // `listen` behavior, but failures will occur immediately.
-        bootstrap(parent, options)
-            .then(complete)
-            .then(start)
-            .catch(error)
-            .done();
-
-        parent.use(function startup(req, res, next) {
-            if (deferred.promise.isFulfilled()) {
-                next();
-                return;
-            }
-            res.status(503).send('Server is starting.');
-        });
-    });
-
-    return app;
+  return app;
 };

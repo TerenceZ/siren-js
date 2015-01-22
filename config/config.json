@@ -1,155 +1,140 @@
 {
+  "view engines": {
 
-    "view engines": {
+  },
 
+  "app": {
+    "env": "", // NOTE: `env` is managed by the framework. This value will be overwritten.
+    "proxy": false,
+    "view engine": null,
+    "views": "path:./views",
+    "view enabled": true,
+    "keys": ["siren-secret-key"]
+  },
+
+  "middleware": {
+
+    "responseTime": {
+      "enabled": true,
+      "priority": 0,
+      "module": {
+        "name": "koa-response-time"
+      }
     },
 
-    "express": {
-        "env": "", // NOTE: `env` is managed by the framework. This value will be overwritten.
-        "x-powered-by": false,
-        "trust proxy": false,
-        "jsonp callback name": null,
-        "json replacer": null,
-        "json spaces": 0,
-        "case sensitive routing": false,
-        "strict routing": false,
-        "view cache": true,
-        "view engine": null,
-        "views": "path:./views",
-        "mountpath": "/"
+    "shutdown": {
+      "enabled": true,
+      "priority": 10,
+      "module": {
+        "name": "siren-js/middleware/shutdown",
+        "arguments": [
+          "__app",
+          {
+            "timeout": 30000,
+            "template": null
+          }
+        ]
+      }
     },
 
-    "middleware": {
+    "compress": {
+      "enabled": false,
+      "priority": 20,
+      "module": "koa-compress"
+    },
 
-        "shutdown": {
-            "enabled": true,
-            "priority": 0,
-            "module": {
-                "name": "kraken-js/middleware/shutdown",
-                "arguments": [{
-                    "timeout": 30000,
-                    "template": null
-                }]
-            }
-        },
+    "favicon": {
+      "enabled": false,
+      "priority": 30,
+      "module": {
+        "name": "koa-favicon",
+        "arguments": [ "path:./public/favicon.ico" ]
+      }
+    },
 
-        "compress": {
-            "enabled": false,
-            "priority": 10,
-            "module": "compression"
-        },
+    "static": {
+      "enabled": true,
+      "priority": 40,
+      "module": {
+        "name": "koa-static",
+        "arguments": ["path:./public"]
+      }
+    },
 
-        "favicon": {
-            "enabled": false,
-            "priority": 30,
-            "module": {
-                "name": "serve-favicon",
-                "arguments": [ "path:./node_modules/kraken-js/public/favicon.ico" ]
-            }
-        },
+    "logger": {
+      "enabled": true,
+      "priority": 50,
+      "module": "koa-logger"
+    },
 
-        "static": {
-            "enabled": true,
-            "priority": 40,
-            "module": {
-                "name": "serve-static",
-                "arguments": [ "path:./public" ]
-            }
-        },
+    "error": {
+      "enabled": true,
+      "priority": 60,
+      "module": {
+        "name": "siren-js/middleware/error",
+        "arguments": null //["path:./public/error.html"]
+      }
+    },
 
-        "logger": {
-            "enabled": true,
-            "priority": 50,
-            "module": {
-              "name": "morgan",
-              "arguments": [ "combined" ]
-            }
-        },
+    "body": {
+      "enabled": true,
+      "priority": 70,
+      "module": {
+        "name": "koa-bodyparser",
+        "arguments": [{
+          "extendTypes": {
+            "json": ["application/x-javascript"]
+          }
+        }]
+      }
+    },
 
-        "json": {
-            "enabled": true,
-            "priority": 60,
-            "module": {
-                "name": "body-parser",
-                "method": "json"
-            }
-        },
+    "session": {
+      "enabled": true,
+      "priority": 80,
+      "module": {
+        "name": "koa-session",
+        "arguments": ["__app"]
+      }
+    },
 
-        "urlencoded": {
-            "enabled": true,
-            "priority": 70,
-            "module": {
-                "name": "body-parser",
-                "method": "urlencoded",
-                "arguments": [{ "extended": true }]
-            }
-        },
+    "appsec": {
+      "enabled": true,
+      "priority": 90,
+      "module": {
+        "name": "siren-lusca",
+        "arguments": [
+          {
+            "csrf": true,
+            "xframe": "SAMEORIGIN",
+            "p3p": false,
+            "csp": false
+          }
+        ]
+      }
+    },
 
-        "multipart": {
-            "enabled": true,
-            "priority": 80,
-            "module": "kraken-js/middleware/multipart"
-        },
+    "404": {
+      "enabled": true,
+      "priority": 100,
+      "module": {
+        "name": "siren-js/middleware/404",
+        "arguments": null //["path:./public/404.html"]
+      }
+    },
 
-        "cookieParser": {
-            "enabled": true,
-            "priority": 90,
-            "module": {
-                "name": "cookie-parser",
-                "arguments": [ "keyboard cat" ]
-            }
-        },
-
-        "session": {
-            "enabled": true,
-            "priority": 100,
-            "module": {
-                "name": "express-session",
-                "arguments": [
-                    {
-                        "key": "",
-                        "secret": "keyboard cat",
-                        "cookie": {
-                            "path": "/",
-                            "httpOnly": true,
-                            "maxAge": null
-                        },
-                        "resave": true,
-                        "saveUninitialized": true,
-                        "proxy": null
-                    }
-                ]
-            }
-        },
-
-        "appsec": {
-            "enabled": true,
-            "priority": 110,
-            "module": {
-                "name": "lusca",
-                "arguments": [
-                    {
-                        "csrf": true,
-                        "xframe": "SAMEORIGIN",
-                        "p3p": false,
-                        "csp": false
-                    }
-                ]
-            }
-        },
-
-        "router": {
-            "enabled": true,
-            "priority": 120,
-            "module": {
-                "name": "express-enrouten",
-                "arguments": [
-                    {
-                        "index": "path:./routes"
-                    }
-                ]
-            }
-        }
-
+    "router": {
+      "enabled": true,
+      "priority": 110,
+      "module": {
+        "name": "siren-enrouten",
+        "arguments": [
+          "__app",
+          {
+            "index": "path:./routes"
+          }
+        ]
+      }
     }
+  }
 }
