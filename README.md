@@ -194,7 +194,7 @@ Additional Note:
     }
   }
   ```
-  and pass into `koa-views(views, options)` as arguments when `app:view enabled` is not false. 
+  and pass into [siren-views](https://github.com/TerenceZ/siren-views) as arguments when `app:view enabled` is not false. 
 
 
 ## Tests
