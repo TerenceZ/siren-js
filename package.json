@@ -16,11 +16,10 @@
     "test": "./test"
   },
   "scripts": {
-    "test": "NODE_ENV=test mocha --harmony --require should --reporter spec --recursive",
-    "test-win": "set NODE_ENV=test & mocha --harmony --require should --reporter spec --recursive",
-    "test-cov": "NODE_ENV=test node --harmony ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --require should --recursive",
-    "test-cov-win": "set NODE_ENV=test & node --harmony ./node_modules/istanbul-harmony/lib/cli cover ./node_modules/mocha/bin/_mocha -- --require should --recursive",
-    "test-travis": "NODE_ENV=test node --harmony ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- --require should --recursive"
+    "test": "mocha --harmony --require should --reporter spec --recursive",
+    "test-win": "mocha --harmony --require should --reporter spec --recursive",
+    "test-cov": "node --harmony ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --require should --recursive",
+    "test-cov-win": "node --harmony ./node_modules/istanbul-harmony/lib/cli cover ./node_modules/mocha/bin/_mocha -- --require should --recursive"
   },
   "repository": {
     "type": "git",
