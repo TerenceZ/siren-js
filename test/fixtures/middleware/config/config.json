@@ -21,7 +21,7 @@
 
         "error": {
             "enabled": false,
-            "priority": 60,
+            "priority": 50,
             "module": {
                 "name": "path:../../../middleware/error",
                 "arguments": [
@@ -32,7 +32,7 @@
 
         "404": {
             "enabled": false,
-            "priority": 100,
+            "priority": 60,
             "module": {
                 "name": "path:../../../middleware/404",
                 "arguments": [

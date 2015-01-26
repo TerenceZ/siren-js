@@ -6,6 +6,7 @@
   "app": {
     "env": "", // NOTE: `env` is managed by the framework. This value will be overwritten.
     "proxy": false,
+    "port": 8000,
     "view engine": null,
     "views": "path:./views",
     "view enabled": true,
@@ -15,16 +16,22 @@
   "middleware": {
 
     "responseTime": {
-      "enabled": true,
+      "enabled": false,
       "priority": 0,
       "module": {
         "name": "koa-response-time"
       }
     },
 
+    "logger": {
+      "enabled": false,
+      "priority": 10,
+      "module": "koa-logger"
+    },
+
     "shutdown": {
       "enabled": true,
-      "priority": 10,
+      "priority": 20,
       "module": {
         "name": "siren-js/middleware/shutdown",
         "arguments": [
@@ -39,49 +46,56 @@
 
     "compress": {
       "enabled": false,
-      "priority": 20,
+      "priority": 30,
       "module": "koa-compress"
     },
 
     "favicon": {
-      "enabled": false,
-      "priority": 30,
+      "enabled": true,
+      "priority": 40,
       "module": {
         "name": "koa-favicon",
         "arguments": [ "path:./public/favicon.ico" ]
       }
     },
 
-    "static": {
+    "error": {
       "enabled": true,
-      "priority": 40,
+      "priority": 50,
       "module": {
-        "name": "koa-static",
-        "arguments": ["path:./public"]
+        "name": "siren-js/middleware/error",
+        "arguments": null //["/error.html"]
       }
     },
 
-    "logger": {
-      "enabled": true,
-      "priority": 50,
-      "module": "koa-logger"
-    },
-
-    "error": {
+    "404": {
       "enabled": true,
       "priority": 60,
       "module": {
-        "name": "siren-js/middleware/error",
-        "arguments": null //["path:./public/error.html"]
+        "name": "siren-js/middleware/404",
+        "arguments": null //["/404.html"]
+      }
+    },
+
+    "static": {
+      "enabled": true,
+      "priority": 70,
+      "module": {
+        "name": "koa-file-server",
+        "arguments": [
+          "path:./public"
+        ]
       }
     },
 
     "body": {
       "enabled": true,
-      "priority": 70,
+      "priority": 80,
       "module": {
         "name": "koa-bodyparser",
         "arguments": [{
+          "formLimit": "100kb",
+          "jsonLimit": "1mb",
           "extendTypes": {
             "json": ["application/x-javascript"]
           }
@@ -91,16 +105,28 @@
 
     "session": {
       "enabled": true,
-      "priority": 80,
+      "priority": 90,
       "module": {
-        "name": "koa-session",
-        "arguments": ["__app"]
+        "name": "koa-generic-session",
+        "arguments": [
+          {
+            "key": "koa.sid",
+            "prefix": "koa:sess:",
+            "cookie": {
+              "httpOnly": true,
+              "maxAge": null,
+              "rewrite": true,
+              "signed": true,
+              "path": "/"
+            }
+          }
+        ]
       }
     },
 
     "appsec": {
       "enabled": true,
-      "priority": 90,
+      "priority": 100,
       "module": {
         "name": "siren-lusca",
         "arguments": [
@@ -111,15 +137,6 @@
             "csp": false
           }
         ]
-      }
-    },
-
-    "404": {
-      "enabled": true,
-      "priority": 100,
-      "module": {
-        "name": "siren-js/middleware/404",
-        "arguments": null //["path:./public/404.html"]
       }
     },
 

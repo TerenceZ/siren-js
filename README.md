@@ -88,54 +88,72 @@ resolve, and register middleware with your express application. You can either s
 
 #### Included Middleware
 Siren.js comes with common middleware already included in its `config.json` file. The following is a list of the included middleware and their default configurations which can be overriden in your app's configuration:
+
 * `responseTime` - adds response time to header.
   - Priority - 0
   - Module - `"koa-response-time"` ([npm](https://www.npmjs.com/package/koa-response-time))
-* `"shutdown"` - internal middleware which handles graceful shutdowns in production environments
+
+* `"logger"` - logs requests and responses
   - Priority - 10
+  - Module - `"koa-logger"` ([npm](https://www.npmjs.org/package/koa-logger))
+
+* `"shutdown"` - internal middleware which handles graceful shutdowns in production environments
+  - Priority - 20
   - Enabled - `true` if *not* in a development environment
   - Module - `"siren-js/middleware/shutdown"`
     - Arguments (*Array*)
       - *String* - the `app` instance placeholder
       - *Object*
         - `"timeout"` - milliseconds (default: `30000`)
-        - `"template"` - template to render (default: `null`)
+        - `"template"` - template to render (default: `null`, related to `app.views`)
+
 * `"compress"` - adds compression to server responses
-  - Priority - 20
+  - Priority - 30
   - Enabled - `false` (disabled in all environments by default)
   - Module - `"koa-compress"` ([npm](https://www.npmjs.com/package/koa-compress))
+
 * `"favicon"` - serves the site's favicon
-  - Priority - 30
-  - Enabled - `false`
+  - Priority - 40
   - Module - `"serve-favicon"` ([npm](https://www.npmjs.org/package/koa-favicon))
     - Arguments (*Array*)
       - *String* - local path to the favicon file (default: `"path:./public/favicon.ico"`)
-* `"static"` - serves static files from a specific folder
-  - Priority - 40
-  - Module - `"koa-static"` ([npm](https://www.npmjs.org/package/koa-static))
-    - Arguments (*Array*)
-      - *String* - local path to serve static files from (default: `"path:./public"`)
-* `"logger"` - logs requests and responses
-  - Priority - 50
-  - Module - `"koa-logger"` ([npm](https://www.npmjs.org/package/koa-logger))
+
 * `"error"` - internal middleware which handles graceful error response
-  - Priority - 60
+  - Priority - 50
   - Module - `"siren-js/middleware/error"`
     - Arguments (*Array*)
-      - *String* - template to render (default: `null`)
-* `"body"` - parses request body
+      - *String* - template to render (default: `null`, realted to `app.views`)
+
+* `"404"` - internal middleware which handles graceful 404 response
+  - Priority - 60
+  - Module - `"siren-js/middleware/404"`
+    - Arguments (*Array*)
+      - *String* - template to render (default: `null`, related to `app.views`)
+
+* `"static"` - serves static files from a specific folder
   - Priority - 70
+  - Module - `"koa-file-server"` ([npm](https://www.npmjs.org/package/koa-file-server))
+    - Arguments (*Array*)
+      - *String* - local path to serve static files from (default: `"path:./public"`)
+
+* `"body"` - parses request body
+  - Priority - 80
   - Module - `"koa-bodyparser"` ([npm](https://www.npmjs.org/package/koa-bodyparser))
     - Arguments (*Array*)
       - *Object*
         - `"extendTypes"` (*Object*) - extended types
+
 * `"session"` - maintains cookie session state
-  - Priority - 80
-  - Module - `"koa-session"` ([npm](https://www.npmjs.org/package/koa-session))
-    - Arguments (*Array*)
-      - *String* - the `app` instance placeholder
-* `"appsec"` - secures the application against common vulnerabilities
   - Priority - 90
+  - Module - `"koa-generic-session"` ([npm](https://www.npmjs.org/package/koa-generic-session))
+    - Arguments (*Array*)
+      - *Object*
+        - `"key"` (*String*) - cookie name (default: `"koa.sid"`)
+        - `"prefix"` (*String*) - session prefix for store (default: `"koa:sess:"`)
+        - `"cookie"` (*Object*) - cookie options
+
+* `"appsec"` - secures the application against common vulnerabilities
+  - Priority - 100
   - Module - `"lusca"` ([github](https://github.com/TerenceZ/siren-lusca))
     - Arguments (*Array*)
       - *Object*
@@ -143,11 +161,7 @@ Siren.js comes with common middleware already included in its `config.json` file
         - `"xframe"` (*String*) - value for the `X-Frame-Options` header (default: `"SAMEORIGIN"`)
         - `"p3p"` (*String*|*Boolean*) - the Compact Privacy Policy value or `false` if not used (default: `false`)
         - `"csp"` (*Object*|*Boolean*) - options configuring Content Security Policy headers or `false` if not used (default: `false`)
-* `"404"` - internal middleware which handles graceful 404 response
-  - Priority - 100
-  - Module - `"siren-js/middleware/404"`
-    - Arguments (*Array*)
-      - *String* - template to render (default: `null`)
+
 * `"router"` - routes traffic to the applicable controller
   - Priority - 110
   - Module - `"siren-enrouten"` ([npm](https://www.npmjs.org/package/siren-enrouten))
@@ -176,6 +190,7 @@ You can configure the koa instance through the `app` field and these field can b
     "app": {
         "env": "", // NOTE: `env` is managed by the framework. This value will be overwritten.
         "proxy": false,
+        "port": 8000,
         "view engine": null,
         "view enabled": true,
         "views": "path:./views",

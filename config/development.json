@@ -1,9 +1,17 @@
 {
   "middleware": {
 
+  	"responseTime": {
+  		"enabled": true
+  	},
+
     "shutdown": {
       // Clean shutdowns aren't necessary in `dev` mode
       "enabled": false
+    },
+
+    "logger": {
+      "enabled": true
     }
   }
 }

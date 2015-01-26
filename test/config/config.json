@@ -2,7 +2,7 @@
     "middleware": {
         "router": {
             "enabled": true,
-            "priority": 120,
+            "priority": 110,
             "module": {
                 "name": "siren-enrouten",
                 "arguments": [
