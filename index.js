@@ -18,7 +18,7 @@
 "use strict";
 
 var co = require("co");
-var koa = require("koa");
+var Application = require("./lib/application");
 var path = require("path");
 var caller = require("caller");
 var bootstrap = require("./lib/bootstrap");
@@ -37,9 +37,9 @@ module.exports = function siren(options) {
   options.protocols = options.protocols || {};
   options.basedir = options.basedir || path.dirname(caller());
 
-  debug("siren options\n", options);
+  var app = Application();
 
-  var app = koa();
+  debug("siren options\n", options);
 
   co(function *() {
 

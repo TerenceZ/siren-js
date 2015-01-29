@@ -3,6 +3,7 @@
     /* Removed for internal development and testing purposes */
     "shutdown": null,
     "404": null,
-    "error": null
+    "error": null,
+    "session": null
   }
 }

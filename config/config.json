@@ -13,6 +13,10 @@
     "keys": ["siren-secret-key"]
   },
 
+  "io": {
+    "enabled": false
+  },
+
   "middleware": {
 
     "responseTime": {
@@ -26,7 +30,12 @@
     "logger": {
       "enabled": false,
       "priority": 10,
-      "module": "koa-logger"
+      "module": {
+        "name": "siren-js/middleware/logger",
+        "arguments": [
+          "__app"
+        ]
+      }
     },
 
     "shutdown": {
@@ -107,8 +116,9 @@
       "enabled": true,
       "priority": 90,
       "module": {
-        "name": "koa-generic-session",
+        "name": "siren-js/middleware/session",
         "arguments": [
+          "__app",
           {
             "key": "koa.sid",
             "prefix": "koa:sess:",

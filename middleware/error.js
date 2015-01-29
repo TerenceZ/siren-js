@@ -29,14 +29,15 @@ module.exports = function (template) {
         case "html":
           if (template && typeof this.render === "function") {
             yield *this.render(template, {
-              env: this.app.env,
               ctx: this,
+              code: err.code,
+              stack: err.stack,
+              env: this.app.env,
+              error: err.message,
+              status: this.status,
               request: this.request,
               response: this.response,
-              error: err.message,
-              stack: err.stack,
-              status: this.status,
-              code: err.code
+              statusMessage: statuses[this.status]
             });
           } else {
             if ("development" === this.app.env || err.expose) {

@@ -2,7 +2,6 @@
 
 process.env.NODE_ENV = "_sirendev";
 
-var koa = require("koa");
 var siren = require("../..");
 var request = require("supertest");
 var should = require("should");

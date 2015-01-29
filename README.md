@@ -1,7 +1,8 @@
 # Siren.js
 
 Siren.js builds upon [koa](https://github.com/koajs/koa) and [Kraken.js](https://github.com/krakenjs/kraken-js) and enables 
-environment-aware, dynamic configuration, advanced middleware capabilities, security, and app lifecycle events.
+environment-aware, dynamic configuration, advanced middleware capabilities, security, app lifecycle events and integrates 
+[socket.io](https://github.com/Automattic/socket.io).
 
 ## Basic Usage
 
@@ -93,9 +94,12 @@ Siren.js comes with common middleware already included in its `config.json` file
   - Priority - 0
   - Module - `"koa-response-time"` ([npm](https://www.npmjs.com/package/koa-response-time))
 
-* `"logger"` - logs requests and responses
+* `"logger"` - internal middleware which logs websocket connections and http requests
   - Priority - 10
-  - Module - `"koa-logger"` ([npm](https://www.npmjs.org/package/koa-logger))
+  - Enabled - `false` but *true* in a development environment
+  - Module - `"siren-js/middleware/logger"`
+    - Arguments (*Array*)
+      - *String* - the `app` instance placeholder
 
 * `"shutdown"` - internal middleware which handles graceful shutdowns in production environments
   - Priority - 20
@@ -143,10 +147,11 @@ Siren.js comes with common middleware already included in its `config.json` file
       - *Object*
         - `"extendTypes"` (*Object*) - extended types
 
-* `"session"` - maintains cookie session state
+* `"session"` - internal middleware which maintains cookie session state based on [koa-generic-session]([npm](https://www.npmjs.org/package/koa-generic-session))
   - Priority - 90
-  - Module - `"koa-generic-session"` ([npm](https://www.npmjs.org/package/koa-generic-session))
+  - Module - `"siren-js/middleware/session"`
     - Arguments (*Array*)
+      - *String* - the `app` instance placeholder
       - *Object*
         - `"key"` (*String*) - cookie name (default: `"koa.sid"`)
         - `"prefix"` (*String*) - session prefix for store (default: `"koa:sess:"`)
@@ -169,6 +174,26 @@ Siren.js comes with common middleware already included in its `config.json` file
       - *String* - the `app` instance placeholder
       - *Object*
         - `"index"` (*String*) - path to the single file to load (default: `"path:./routes"`)
+
+### Socket.io
+The integration for socket.io is based on [koa.io](https://github.com/koajs/koa.io), but in default the io is disable. You can enable it through the config file, for example:
+```json
+{
+  "app": {
+    // ...
+  },
+
+  "io": {
+    "enabled": true,
+    // other socket.io options.
+  }
+}
+```
+Once you enable socket.io, you can access it through `app.io`, for more information, please refer to [koa.io](https://github.com/koajs/koa.io).
+
+Aditional Notes:
+- Unlike koa.io, there is no `app.session`, but instead, we wrap it into the middleware `siren-js/middleware/session.js`, which is used as middleware in default
+- The dependency for socket.io is marked as dev-dependency, so if you enable the socket.io, you should install [socket.io package](https://www.npmjs.com/package/socket.io)
 
 
 ### Lifecycle Events

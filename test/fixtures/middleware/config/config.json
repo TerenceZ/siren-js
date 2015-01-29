@@ -4,10 +4,19 @@
         "views": "path:./views"
     },
 
+    "io": {
+        "enabled": true
+    },
+
     "middleware": {
+        "logger": {
+            "enabled": false,
+            "module": {
+                "name": "path:../../../middleware/logger"
+            }
+        },
         "shutdown": {
             "enabled": false,
-            "priority": 10,
             "module": {
                 "name": "path:../../../middleware/shutdown",
                 "arguments": [
@@ -18,10 +27,8 @@
                 ]
             }
         },
-
         "error": {
             "enabled": false,
-            "priority": 50,
             "module": {
                 "name": "path:../../../middleware/error",
                 "arguments": [
@@ -32,13 +39,34 @@
 
         "404": {
             "enabled": false,
-            "priority": 60,
             "module": {
                 "name": "path:../../../middleware/404",
                 "arguments": [
                   "404"
                 ]
             }
+        },
+
+        "session": {
+          "enabled": true,
+          "module": {
+            "name": "path:../../../middleware/session",
+            "arguments": [
+              "__app",
+              {
+                "key": "koa.sid",
+                "prefix": "koa:sess:",
+                "cookie": {
+                  "httpOnly": true,
+                  "maxAge": null,
+                  "rewrite": true,
+                  "signed": true,
+                  "path": "/"
+                },
+                "ns": "/user"
+              }
+            ]
+          }
         },
 
         "custom": {

@@ -1,6 +1,6 @@
 {
   "name": "siren-js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A koa-based Node.js web application bootstrapping module, based on kraken-js.",
   "keywords": [
     "node.js",
@@ -57,10 +57,12 @@
     "caller": "^1.0.0",
     "co": "^4.1.0",
     "confit": "^1.2.0",
+    "cookies": "^0.5.0",
     "debuglog": "^1.0.1",
+    "delegates": "^0.1.0",
     "endgame": "0.0.3",
     "koa": "^0.15.0",
-    "koa-bodyparser": "^1.3.0",
+    "koa-bodyparser": "^1.3.1",
     "koa-compose": "^2.3.0",
     "koa-compress": "^1.0.8",
     "koa-favicon": "^1.2.0",
@@ -69,6 +71,8 @@
     "koa-logger": "^1.2.2",
     "koa-response-time": "^1.0.2",
     "on-finished": "^2.2.0",
+    "parseurl": "^1.3.0",
+    "querystring": "^0.2.0",
     "shortstop-handlers": "^1.0.0",
     "shortstop-resolve": "^1.0.1",
     "siren-enrouten": "^1.0.1",
@@ -78,11 +82,14 @@
     "statuses": "^1.2.0"
   },
   "devDependencies": {
+    "socket.io": "^1.3.2",
     "istanbul-harmony": "^0.3.1",
     "jade": "^1.9.1",
     "mocha": "^2.1.0",
+    "pedding": "^1.0.0",
     "should": "^4.6.1",
     "siren-mount": "^1.0.0",
+    "socket.io-client": "^1.3.2",
     "supertest": "^0.15.0"
   }
 }

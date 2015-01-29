@@ -133,6 +133,40 @@ function run(name, path, decorate) {
       });
     });
 
+    describe("io", function () {
+
+      it("should startup with no io", function (done) {
+
+        var app = decorate(siren());
+
+        app.on("start", function () {
+
+          should.not.exist(app.io);
+          done();
+        });
+
+        app.on("error", done);
+      });
+
+      it("should startup with io", function (done) {
+
+        var app = decorate(siren({
+          onconfig: function *(config) {
+            config.set("io:enabled", true);
+          }
+        }));
+
+        app.on("start", function () {
+
+          should.exist(app.io);
+          app.io.should.be.an.instanceof(require("socket.io"));
+          done();
+        });
+
+        app.on("error", done);
+      });
+    });
+
     it("should shutdown", function (done) {
 
       var plan = should.plan(4, done);

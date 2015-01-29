@@ -2,7 +2,7 @@
 
 process.env.NODE_ENV = "_sirendev";
 
-var koa = require("koa");
+var koa = require("../../lib/application");
 var settings = require("../../lib/settings");
 var middleware = require("../../lib/middleware");
 var request = require("supertest");

@@ -17,5 +17,8 @@
         "ab0": "options:a.b[0]",
         "ab1": "options:a.b[1]()",
         "ab20d": "options:a.b[2][0].d"
+    },
+    "io": {
+        "enabled": true
     }
 }

@@ -2,7 +2,7 @@
 
 process.env.NODE_ENV = "_sirendev";
 
-var koa = require("koa");
+var koa = require("../../lib/application");
 var settings = require("../../lib/settings");
 var should = require("should");
 var path = require("path");
@@ -31,13 +31,25 @@ describe("settings", function () {
       should.exists(app.settings);
       should.exists(app.context.settings);
       should.exists(app.keys);
+      should.exists(app.proxy);
       app.proxy.should.be.false;
       app.env.should.equal(process.env.NODE_ENV);
       done();
-    }).catch (function (e) {
+    }).catch(done);
+  });
 
-      done(e);
-    });
+  it("should init socket.io", function (done) {
+
+    var app = koa();
+    co(function *() {
+
+      yield *settings(app, options);
+      should.exists(app.io);
+      app.io.should.be.instanceof(require("socket.io"));
+      should.exists(app.io.keys);
+      should.exists(app.io.proxy);
+      done();
+    }).catch(done);
   });
 
   it("should parse custom protocol", function (done) {
