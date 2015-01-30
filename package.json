@@ -1,6 +1,6 @@
 {
   "name": "siren-js",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A koa-based Node.js web application bootstrapping module, based on kraken-js.",
   "keywords": [
     "node.js",

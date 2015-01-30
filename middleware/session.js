@@ -16,7 +16,6 @@ module.exports = function (app, opts) {
 
 		ns.forEach(function () {
 
-			// TODO: add csrf check.
 			this.io.of(ns).use(session);
 		}, app);		
 	}
