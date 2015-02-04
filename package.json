@@ -1,6 +1,6 @@
 {
   "name": "siren-js",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A koa-based Node.js web application bootstrapping module, based on kraken-js.",
   "keywords": [
     "node.js",
@@ -76,7 +76,7 @@
     "shortstop-handlers": "^1.0.0",
     "shortstop-resolve": "^1.0.1",
     "siren-enrouten": "^1.0.1",
-    "siren-lusca": "^1.0.3",
+    "siren-lusca": "^1.0.4",
     "siren-meddleware": "^1.0.0",
     "siren-views": "^1.0.0",
     "statuses": "^1.2.0"
